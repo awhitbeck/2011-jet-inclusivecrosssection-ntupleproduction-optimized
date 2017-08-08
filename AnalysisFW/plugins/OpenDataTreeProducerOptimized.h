@@ -125,49 +125,33 @@ class OpenDataTreeProducerOptimized : public edm::EDAnalyzer
     static const UInt_t kMaxNtrg = 32;
 
     // PF jets
-    /* UInt_t njet; */
-    /* Float_t jet_pt[kMaxNjet]; */
-    /* Float_t jet_eta[kMaxNjet]; */
-    /* Float_t jet_phi[kMaxNjet]; */
-    /* Float_t jet_E[kMaxNjet]; */
-    /* Bool_t jet_tightID[kMaxNjet]; */
-    /* Float_t jet_area[kMaxNjet]; */
-    /* Float_t jet_jes[kMaxNjet]; */
-    /* Int_t jet_igen[kMaxNjet]; */
-
-    // PF jets
-    UInt_t njet_ak7;
-    Float_t jet_pt_ak7[kMaxNjet];
-    Float_t jet_eta_ak7[kMaxNjet];
-    Float_t jet_phi_ak7[kMaxNjet];
-    Float_t jet_E_ak7[kMaxNjet];
-    Float_t jet_msd_ak7[kMaxNjet];
-    Float_t jet_area_ak7[kMaxNjet];
-    Float_t jet_jes_ak7[kMaxNjet];    
-    Float_t jet_tau21_ak7[kMaxNjet];
-    Int_t jet_igen_ak7[kMaxNjet];
-    Int_t jet_igenjet_ak7[kMaxNjet];
-    Int_t jet_isW_ak7[kMaxNjet];
-    Int_t jet_ncand_ak7[kMaxNjet];
-    //Int_t ak7_to_ak5[kMaxNjet];
+    UInt_t njet;
+    Float_t jet_pt[kMaxNjet];
+    Float_t jet_eta[kMaxNjet];
+    Float_t jet_phi[kMaxNjet];
+    Float_t jet_E[kMaxNjet];
+    Bool_t jet_tightID[kMaxNjet];
+    Float_t jet_area[kMaxNjet];
+    Float_t jet_jes[kMaxNjet];
+    Int_t jet_igen[kMaxNjet];
 
     // Jet composition
-    /* Float_t chf[kMaxNjet]; */
-    /* 	Float_t nhf[kMaxNjet]; */
-    /* 	Float_t phf[kMaxNjet]; */
-    /* 	Float_t elf[kMaxNjet]; */
-    /* 	Float_t muf[kMaxNjet]; */
-    /* 	Float_t hf_hf[kMaxNjet]; */
-    /* 	Float_t hf_phf[kMaxNjet]; */
-    /* 	Int_t hf_hm[kMaxNjet]; */
-    /* 	Int_t hf_phm[kMaxNjet]; */
-    /* 	Int_t chm[kMaxNjet]; */
-    /* 	Int_t nhm[kMaxNjet]; */
-    /* 	Int_t phm[kMaxNjet]; */
-    /* 	Int_t elm[kMaxNjet]; */
-    /* 	Int_t mum[kMaxNjet];    */
-    /* Float_t beta[kMaxNjet];    */
-    /* Float_t bstar[kMaxNjet]; */
+    Float_t chf[kMaxNjet];
+    Float_t nhf[kMaxNjet];
+    Float_t phf[kMaxNjet];
+    Float_t elf[kMaxNjet];
+    Float_t muf[kMaxNjet];
+    Float_t hf_hf[kMaxNjet];
+    Float_t hf_phf[kMaxNjet];
+    Int_t hf_hm[kMaxNjet];
+    Int_t hf_phm[kMaxNjet];
+    Int_t chm[kMaxNjet];
+    Int_t nhm[kMaxNjet];
+    Int_t phm[kMaxNjet];
+    Int_t elm[kMaxNjet];
+    Int_t mum[kMaxNjet];
+    Float_t beta[kMaxNjet];
+    Float_t bstar[kMaxNjet];
 
     // Generated jets
     UInt_t ngen;
@@ -214,7 +198,7 @@ class OpenDataTreeProducerOptimized : public edm::EDAnalyzer
     
     //PF Candidates
     std::vector<float> *etas, *phis, *pts;
-    std::vector<int> *ids, *charges, *ak7indices;
+    std::vector<int> *ids, *charges, *ak5indices;
     
     // c2numpy
     c2numpy_writer writer;
