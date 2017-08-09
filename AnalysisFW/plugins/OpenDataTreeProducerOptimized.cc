@@ -502,7 +502,9 @@ void OpenDataTreeProducerOptimized::analyze(edm::Event const &event_obj,
         // take stored JEC factor
         jec = (i_ak5jet_orig->second).second;
         // apply JEC
-        corjet.scaleEnergy(jec);
+        
+        //corjet.scaleEnergy(jec);
+        
         // pointer for further use
         const PFJet* i_ak5jet = &corjet;
 
@@ -568,13 +570,13 @@ void OpenDataTreeProducerOptimized::analyze(edm::Event const &event_obj,
         } 
         // Jet composition
         // (all energy fractions have to be multiplied by the JEC factor)
-        chf[ak5_index]     = i_ak5jet->chargedHadronEnergyFraction() * jec;
-        nhf[ak5_index]     = (i_ak5jet->neutralHadronEnergyFraction() + i_ak5jet->HFHadronEnergyFraction()) * jec;
-        phf[ak5_index]     = i_ak5jet->photonEnergyFraction() * jec;
-        elf[ak5_index]     = i_ak5jet->electronEnergyFraction() * jec;
-        muf[ak5_index]     = i_ak5jet->muonEnergyFraction() * jec;
-        hf_hf[ak5_index]   = i_ak5jet->HFHadronEnergyFraction() * jec;
-        hf_phf[ak5_index]  = i_ak5jet->HFEMEnergyFraction() * jec;
+        chf[ak5_index]     = i_ak5jet->chargedHadronEnergyFraction() ;//* jec;
+        nhf[ak5_index]     = (i_ak5jet->neutralHadronEnergyFraction() + i_ak5jet->HFHadronEnergyFraction()) ;//* jec;
+        phf[ak5_index]     = i_ak5jet->photonEnergyFraction() ;//* jec;
+        elf[ak5_index]     = i_ak5jet->electronEnergyFraction() ;//* jec;
+        muf[ak5_index]     = i_ak5jet->muonEnergyFraction() ;//* jec;
+        hf_hf[ak5_index]   = i_ak5jet->HFHadronEnergyFraction() ;//* jec;
+        hf_phf[ak5_index]  = i_ak5jet->HFEMEnergyFraction() ;//* jec;
         hf_hm[ak5_index]   = i_ak5jet->HFHadronMultiplicity();
         hf_phm[ak5_index]  = i_ak5jet->HFEMMultiplicity();
         chm[ak5_index]     = i_ak5jet->chargedHadronMultiplicity();
