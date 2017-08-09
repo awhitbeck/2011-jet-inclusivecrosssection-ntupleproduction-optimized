@@ -18,12 +18,9 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 runOnVM = False
 
 # Local input
-#fileList = FileUtils.loadListFromFile(
-    #'tmp.txt',
-    #'CMS_MonteCarlo2011_Summer11LegDR_W1Jet_TuneZ2_7TeV-madgraph-tauola_AODSIM_PU_S13_START53_LV6-v1_00000_file_index.txt',
-    #'CMS_MonteCarlo2011_Summer11LegDR_QCD_Pt-80to120_TuneZ2_7TeV_pythia6_AODSIM_PU_S13_START53_LV6-v1_00000_file_index.txt'
-#)
-process.source.fileNames = cms.untracked.vstring([sys.argv[2]])
+fileList = FileUtils.loadListFromFile('CMS_MonteCarlo2011_Summer11LegDR_QCD_Pt-80to120_TuneZ2_7TeV_pythia6_AODSIM_PU_S13_START53_LV6-v1_00000_file_index.txt')
+#fileList = ['file:04C05FC3-35B7-E311-9924-003048679182.root']
+process.source.fileNames = cms.untracked.vstring(*fileList)
 
 if runOnVM:
     process.GlobalTag.connect = cms.string('sqlite_file:/cvmfs/cms-opendata-conddb.cern.ch/START53_LV6A1.db')
@@ -57,7 +54,7 @@ process.ak5ak7 = cms.EDAnalyzer('OpenDataTreeProducerOptimized',
     ## MET collection ####
     pfmet           = cms.InputTag('pfMET7'),
     ## database entry for the uncertainties ######
-    PFPayloadName   = cms.string('AK7PF'),
+    PFPayloadName   = cms.string('AK5PF'),
 
     ## set the conditions for good Vtx counting ##
     offlineVertices = cms.InputTag('goodOfflinePrimaryVertices'),
@@ -67,13 +64,13 @@ process.ak5ak7 = cms.EDAnalyzer('OpenDataTreeProducerOptimized',
     srcPFRho        = cms.InputTag('kt6PFJets','rho'),
     ## preselection cuts #########################
     maxY            = cms.double(99.0), 
-    maxEta          = cms.double(2.0), 
-    minPFPt         = cms.double(100),
+    maxEta          = cms.double(10.0), 
+    minPFPt         = cms.double(10.),
     minNPFJets      = cms.int32(1),
     minGenPt        = cms.untracked.double(30),
     minJJMass       = cms.double(-1),
     isMCarlo        = cms.untracked.bool(True),
-    genjets         = cms.untracked.InputTag('ak7GenJets'),
+    genjets         = cms.untracked.InputTag('ak5GenJets'),
     genparticles    = cms.untracked.InputTag('genParticles'),
     useGenInfo      = cms.untracked.bool(True),
     ## trigger ###################################
@@ -115,8 +112,7 @@ process.p = cms.Path(
 # 50000 events per 1 hour (both for DATA and MC)
 
 # Change number of events here:
-#process.maxEvents.input = 1000
-process.maxEvents.input = -1
+process.maxEvents.input = 10000
 
 process.MessageLogger.cerr.FwkReport.reportEvery = 500
 
