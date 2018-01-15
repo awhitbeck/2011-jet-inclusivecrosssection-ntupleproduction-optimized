@@ -226,6 +226,8 @@ void OpenDataTreeProducerOptimized::beginJob() {
     c2numpy_addcolumn(&writer, "jet_E", C2NUMPY_FLOAT64);
     c2numpy_addcolumn(&writer, "jet_area", C2NUMPY_FLOAT64);
     c2numpy_addcolumn(&writer, "jet_jes", C2NUMPY_FLOAT64);
+    c2numpy_addcolumn(&writer, "gen_pt", C2NUMPY_FLOAT64);
+    c2numpy_addcolumn(&writer, "jet_gen_dr", C2NUMPY_FLOAT64);
 
     c2numpy_addcolumn(&writer, "chf", C2NUMPY_FLOAT64);
     c2numpy_addcolumn(&writer, "nhf", C2NUMPY_FLOAT64);
@@ -487,20 +489,28 @@ void OpenDataTreeProducerOptimized::analyze(edm::Event const &event_obj,
     // value (std::pair<PFJet*, double>) is pair of original jet iterator and corresponding JEC factor
     std::map<double, std::pair<reco::PFJetCollection::const_iterator, double> > sortedJets;
     for (auto i_ak5jet_orig = ak5_handle->begin(); i_ak5jet_orig != ak5_handle->end(); ++i_ak5jet_orig) {
+        auto p4 = i_ak5jet_orig->p4();
+        jet_pt[ak5_index]   = p4.Pt();
+        jet_eta[ak5_index]  = p4.Eta();
+        jet_phi[ak5_index]  = p4.Phi();
+        jet_E[ak5_index]    = p4.E(); 
+        
         // take jet energy correction and get corrected pT
         jec = corrector_ak5->correction(*i_ak5jet_orig, event_obj, iSetup);
         // Multiply pT by -1 in order to have largest pT jet first (sorted in ascending order by default)
         sortedJets.insert(std::pair<double, std::pair<reco::PFJetCollection::const_iterator, double> >(-1 * i_ak5jet_orig->pt() * jec, std::pair<reco::PFJetCollection::const_iterator, double>(i_ak5jet_orig, jec)));
+        ak5_index++;
     }
 
+    ak5_index = 0;
     // // Iterate over the jets (sorted in pT) of the event
-    for (auto i_ak5jet_orig = sortedJets.begin(); i_ak5jet_orig != sortedJets.end(); ++i_ak5jet_orig) {
+    for (auto i_ak5jet_it = sortedJets.begin(); i_ak5jet_it != sortedJets.end(); ++i_ak5jet_it) {
 
         // Apply jet energy correction "on the fly":
         // copy original (uncorrected) jet;
-        PFJet corjet = *((i_ak5jet_orig->second).first);
+        PFJet corjet = *((i_ak5jet_it->second).first);
         // take stored JEC factor
-        jec = (i_ak5jet_orig->second).second;
+        jec = (i_ak5jet_it->second).second;
         // apply JEC
         
         //corjet.scaleEnergy(jec);
@@ -518,7 +528,7 @@ void OpenDataTreeProducerOptimized::analyze(edm::Event const &event_obj,
         // Computing beta and beta*
 
         // Get tracks
-        reco::TrackRefVector tracks = reco::JetTracksAssociation::getValue(*tracksInJets, *((i_ak5jet_orig->second).first));
+        reco::TrackRefVector tracks = reco::JetTracksAssociation::getValue(*tracksInJets, *((i_ak5jet_it->second).first));
 
         float sumTrkPt(0.0), sumTrkPtBeta(0.0),sumTrkPtBetaStar(0.0);
         beta[ak5_index] = 0.0;
@@ -605,15 +615,16 @@ void OpenDataTreeProducerOptimized::analyze(edm::Event const &event_obj,
         jet_area[ak5_index] = i_ak5jet->jetArea();
         jet_jes[ak5_index] = jec; // JEC factor
 
-        // p4 is already corrected!
-        auto p4 = i_ak5jet->p4();
-        jet_pt[ak5_index]   = p4.Pt();
-        jet_eta[ak5_index]  = p4.Eta();
-        jet_phi[ak5_index]  = p4.Phi();
-        jet_E[ak5_index]    = p4.E(); 
+        //auto p4 = i_ak5jet->p4();
+        //jet_pt[ak5_index]   = p4.Pt()/jec;
+        //jet_eta[ak5_index]  = p4.Eta();
+        //jet_phi[ak5_index]  = p4.Phi();
+        //jet_E[ak5_index]    = p4.E()/jec; 
         
         // Matching a GenJet to this PFjet
         jet_igen[ak5_index] = 0;
+        float jet_gen_pt = -1.;
+        float jet_gen_dr = -1.;
         if (mIsMCarlo && ngen > 0) {
 
             // Index of the generated jet matching this PFjet
@@ -628,7 +639,9 @@ void OpenDataTreeProducerOptimized::analyze(edm::Event const &event_obj,
                                                 gen_phi[gen_index]);
                 if (deltaR2 < r2min) {
                     r2min = deltaR2;
+                    jet_gen_dr = deltaR2;
                     jet_igen[ak5_index] = gen_index;
+                    jet_gen_pt = gen_pt[gen_index];
                 }
             }
         }
@@ -659,13 +672,15 @@ void OpenDataTreeProducerOptimized::analyze(edm::Event const &event_obj,
             c2numpy_float64(&writer, pthat);
             c2numpy_float64(&writer, mcweight);
             c2numpy_intc(&writer, njet);
-            c2numpy_float64(&writer, p4.Pt());
+            c2numpy_float64(&writer, jet_pt[ak5_index]);
             //c2numpy_float64(&writer, p4.Pt()/jec);
-            c2numpy_float64(&writer, p4.Eta());
-            c2numpy_float64(&writer, p4.Phi());
-            c2numpy_float64(&writer, p4.E());
+            c2numpy_float64(&writer, jet_eta[ak5_index]);
+            c2numpy_float64(&writer, jet_phi[ak5_index]);
+            c2numpy_float64(&writer, jet_E[ak5_index]);
             c2numpy_float64(&writer, i_ak5jet->jetArea());
-            c2numpy_float64(&writer, jec);	    
+            c2numpy_float64(&writer, jec);	  
+            c2numpy_float64(&writer, jet_gen_pt);
+            c2numpy_float64(&writer, jet_gen_dr);
             //c2numpy_intc(&writer, jet_ncand_ak5[ak5_index]);
 
             c2numpy_float64(&writer, chf[0]);

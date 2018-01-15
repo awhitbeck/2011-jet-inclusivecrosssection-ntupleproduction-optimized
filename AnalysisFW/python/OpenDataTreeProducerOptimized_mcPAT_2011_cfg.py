@@ -18,7 +18,14 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 runOnVM = False
 
 # Local input
-fileList = FileUtils.loadListFromFile('CMS_MonteCarlo2011_Summer11LegDR_QCD_Pt-80to120_TuneZ2_7TeV_pythia6_AODSIM_PU_S13_START53_LV6-v1_00000_file_index.txt')
+#fileList = FileUtils.loadListFromFile('test.txt')
+#fileList = FileUtils.loadListFromFile('CMS_MonteCarlo2011_Summer11LegDR_QCD_Pt-15to30_TuneZ2_7TeV_pythia6_AODSIM_PU_S13_START53_LV6-v1_00002_file_index.txt')
+#fileList = FileUtils.loadListFromFile('CMS_MonteCarlo2011_Summer11LegDR_QCD_Pt-30to50_TuneZ2_7TeV_pythia6_AODSIM_PU_S13_START53_LV6-v1_00000_file_index.txt')
+fileList = FileUtils.loadListFromFile('CMS_MonteCarlo2011_Summer11LegDR_QCD_Pt-50to80_TuneZ2_7TeV_pythia6_AODSIM_PU_S13_START53_LV6-v1_00000_file_index.txt')
+#fileList = FileUtils.loadListFromFile('CMS_MonteCarlo2011_Summer11LegDR_QCD_Pt-80to120_TuneZ2_7TeV_pythia6_AODSIM_PU_S13_START53_LV6-v1_00000_file_index.txt')
+#fileList = FileUtils.loadListFromFile('CMS_MonteCarlo2011_Summer11LegDR_QCD_Pt-120to170_TuneZ2_7TeV_pythia6_AODSIM_PU_S13_START53_LV6-v1_00000_file_index.txt')
+#fileList = FileUtils.loadListFromFile('CMS_MonteCarlo2011_Summer11LegDR_QCD_Pt-170to300_TuneZ2_7TeV_pythia6_AODSIM_PU_S13_START53_LV6-v1_00000_file_index.txt')
+#fileList = FileUtils.loadListFromFile('CMS_MonteCarlo2011_Summer11LegDR_QCD_Pt-300to470_TuneZ2_7TeV_pythia6_AODSIM_PU_S13_START53_LV6-v1_00000_file_index.txt')
 #fileList = ['file:04C05FC3-35B7-E311-9924-003048679182.root']
 process.source.fileNames = cms.untracked.vstring(*fileList)
 
@@ -67,7 +74,7 @@ process.ak5ak7 = cms.EDAnalyzer('OpenDataTreeProducerOptimized',
     maxEta          = cms.double(10.0), 
     minPFPt         = cms.double(10.),
     minNPFJets      = cms.int32(1),
-    minGenPt        = cms.untracked.double(30),
+    minGenPt        = cms.untracked.double(10),
     minJJMass       = cms.double(-1),
     isMCarlo        = cms.untracked.bool(True),
     genjets         = cms.untracked.InputTag('ak5GenJets'),

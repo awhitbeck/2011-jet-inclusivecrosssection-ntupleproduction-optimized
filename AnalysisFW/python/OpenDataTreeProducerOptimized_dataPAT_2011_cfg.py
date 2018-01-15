@@ -17,10 +17,10 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 runOnVM = False
 
 # Index of data files
-#files2011data = FileUtils.loadListFromFile('CMS_Run2011A_Jet_AOD_12Oct2013-v1_20000_file_index.txt')
-#process.source.fileNames = cms.untracked.vstring(*files2011data)
+files2011data = ["file:024E0F96-B93E-E311-8A3C-02163E008DA1.root"]
+process.source.fileNames = cms.untracked.vstring(*files2011data)
                                                              
-process.source.fileNames = cms.untracked.vstring([sys.argv[2]])
+#process.source.fileNames = cms.untracked.vstring([sys.argv[2]])
 
 # Read condition data from local sqlite database
 if runOnVM:
